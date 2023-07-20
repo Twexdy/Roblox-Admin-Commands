@@ -1,3 +1,3 @@
-return function(arguments)
-    
-end    
+return function(argumentsGiven)
+
+end

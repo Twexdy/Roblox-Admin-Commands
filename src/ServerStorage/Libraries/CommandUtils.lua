@@ -18,15 +18,15 @@ function module.removeCommandPrefix(message:string, validPrefixes:{string}): cla
 end
 
 --[[
-* biasedSplit - Parses a string to extract tokens, using a separator and an encloser.
+* biasedSplit - Splits a string using a separator and an encloser.
 
-baseStr (string) - The input string to be parsed.
-separatorChar (string) - The character used as the primary separator to split tokens. Must be only a single character!
+baseStr (string) - The input string to be split.
+separatorChar (string) - The character used as the primary separator. Must be only a single character!
 enclosingChar (string) - The character used as the enclosing separator. Must be only a single character!
 
 return (array) - An array of strings containing the extracted tokens in order.
 
-This function is useful for parsing single arguments that may have spaces in them, like a text message.
+This function is useful for parsing tokens with single arguments that may have spaces in them, like a text message.
 It allows you to extract tokens based on the primary separator while ignoring separators within the encloser.
 
 Example:
@@ -77,14 +77,31 @@ end
 
 function module.parseCommandArguments(command:{any}, tokens:{string}, player:Player, parseFunctions:{any}): classes.Result<{any} | string>
 	local arguments = table.move(tokens, 2, #tokens, 1, {})
+	local commandArgumentList = command.arguments
+
 	local parsedArguments = {}
-	for argCount, argType in ipairs(command.arguments) do
-		local parseFunction = parseFunctions[argType]
-		local parseResult = parseFunction(arguments[argCount], player)
-		if not parseResult.didSucceed then
-			return parseResult -- return error result
+	for argumentCount, argument in ipairs(commandArgumentList) do
+		local currentGivenArgument = arguments[argumentCount]
+
+		if not currentGivenArgument and not argument.optional then
+			return classes.newResult(false, `Required argument #{argumentCount} '{argument.name}' is missing.`)
+
+		elseif argument.optional then
+			assert(argumentCount == #commandArgumentList, `Attempt to parse optional argument that is not the last argument. Argument name: {argument.name}. Please verify your command configurations.`)
+			if not currentGivenArgument then
+				parsedArguments[argument.name] = argument.default
+			end
 		end
-		table.insert(parsedArguments, parseResult.resultValue)
+
+		local parseFunction = parseFunctions[argument.type]
+		assert(parseFunction, `Attempt to parse unknown argument type '{argument.type}'. Argument name: {argument.name}. Please verify your command configurations.`)
+		
+		local parseResult:classes.Result<{Player}|number|boolean|string> = parseFunction(currentGivenArgument, player)
+
+		if not parseResult.didSucceed then
+			return classes.newResult(false, `Invalid argument #{argumentCount} '{argument.name}'. {parseResult.resultValue}`)
+		end
+		parsedArguments[argument.name] = parseResult.resultValue
 	end
 	return classes.newResult(true, parsedArguments)
 end

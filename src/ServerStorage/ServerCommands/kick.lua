@@ -1,9 +1,9 @@
--- argumentsGiven[1] = manyPlayers, argumentsGiven[2] = string
+-- argumentsGiven["Player/s"] = manyPlayers, argumentsGiven["Message"] = string (optional)
 
 return function(argumentsGiven)
-	local players = argumentsGiven[1]
+	local players = argumentsGiven["Player/s"]
 	for _, v in pairs(players) do
-		v:Kick(argumentsGiven[2])
+		v:Kick(argumentsGiven["Message"])
 	end
 end
 

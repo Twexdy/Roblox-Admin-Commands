@@ -22,10 +22,6 @@ Possible Identifiers:
 Note: The function is case-insensitive when comparing the argument with the identifiers.
 ]]--
 function module.manyPlayers(argumentGiven:string, player:Player): classes.Result<{Player} | string>
-	if not argumentGiven then
-		return classes.newResult(false, "Provide a player.")
-	end	
-
 	local argumentPlayer = game:GetService("Players"):FindFirstChild(argumentGiven)
 	local playerList = game:GetService("Players"):GetChildren()
 	local argumentLowercase = string.lower(argumentGiven)

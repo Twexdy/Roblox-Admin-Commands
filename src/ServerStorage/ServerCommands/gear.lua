@@ -1,12 +1,19 @@
--- argumentsGiven[1] = manyPlayers, argumentsGiven[2] = string
+-- argumentsGiven["Player/s"] = manyPlayers, argumentsGiven["Tool ID"] = string
 
 return function(argumentsGiven)
-	for _, plr in pairs(argumentsGiven[1]) do
-		local tool = game:GetService("InsertService"):LoadAsset(argumentsGiven[2])
+	for _, player in pairs(argumentsGiven["Player/s"]) do
+		local tool
+		local success, errorMessage = pcall(function()
+			tool = game:GetService("InsertService"):LoadAsset(argumentsGiven["Tool ID"])
+		end)
+		if not success then
+			error(`Failed to load tool. {errorMessage}.`, 0)
+		end
+
 		if not tool:IsA("Tool") then
 			tool = tool:FindFirstChildWhichIsA("Tool")
 		end
-		tool.Parent = plr.Backpack
+		tool.Parent = player.Backpack
 	end
 end
 

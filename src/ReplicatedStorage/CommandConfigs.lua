@@ -35,37 +35,28 @@ local ServerCommands = game:GetService("ServerStorage").ServerCommands
 local module = {
 	gear = {
 		aliases = {"gear", "tool"},
-		arguments = {"manyPlayers", "string"},
+		arguments = {
+			{type = "manyPlayers", name = "Player/s"},
+			{type = "string", name = "Tool ID"} },
 		info = "Equips players with a gear or tool specified by an assetID.",
 		commandFunction = require(ServerCommands.gear),
 	},
 	
 	kick = {
 		aliases = {"kick"},
-		arguments = {"manyPlayers", "string"},
-		info = "Removes players from the server.",
+		arguments = {
+			{type = "manyPlayers", name = "Player/s"},
+			{type = "string", name = "Message", optional = true} },
+		info = "Removes players from the server with an optional message.",
 		commandFunction = require(ServerCommands.kick),
 	},
 	
 	kill = {
 		aliases = {"kill"},
-		arguments = {"manyPlayers"},
+		arguments = { 
+			{type = "manyPlayers", name = "Player/s"} },
 		info = "Kills players' characters.",
 		commandFunction = require(ServerCommands.kill),
-	},
-	
-	sword = {
-		aliases = {"sword"},
-		arguments = {"manyPlayers"},
-		info = "Gives players the Roblox sword tool.",
-		commandFunction = require(ServerCommands.sword),
-	},
-	
-	god = {
-		aliases = {"god"},
-		arguments = {"manyPlayers"},
-		info = "Gives players infinite health.",
-		commandFunction = require(ServerCommands.god),
 	},
 
 }
