@@ -11,17 +11,17 @@
 
 * Arguments are given to the commandFunction in the order they're listed in the arguments parameter. Currently, valid data types for commands are the following
    - manyPlayers: This type represents one or more players currently in the server. Players can use identifiers like "all", "others", "me", or individual player names to specify the target players for the command.
-   - string: This type represents plain text.
-
-* These data types are planned to be added in the future
-   - integer: A number without any decimal points.
-   - number: AKA a float, a number with decimal points.
-   - boolean: A true or false value.
+   - string: Plain text without any modifications.
+   - integer: A number without any decimal points. If any decimal points are provided, they will be removed when passed to the command.
+   - number: A number with decimal points. (AKA a float)
+   - boolean: A true or false value. "true", "yes", or "1" are valid true values and "false", "no", or "0" are valid false values.
 
 * Command emplate
 	command_name = {
 		aliases = {"command", "aliases"},
-		arguments = {"arg1Type", "arg2Type", ...},
+		arguments = {
+			{name = "argumentName", type = "argumentType", optional = false, default = nil}
+			{...} }
 		info = "Description of the command.",
 		commandFunction = require("path.to.command_script"),
 	},
@@ -37,7 +37,7 @@ local module = {
 		aliases = {"gear", "tool"},
 		arguments = {
 			{type = "manyPlayers", name = "Player/s"},
-			{type = "string", name = "Tool ID"} },
+			{type = "integer", name = "Tool ID"} },
 		info = "Equips players with a gear or tool specified by an assetID.",
 		commandFunction = require(ServerCommands.gear),
 	},
