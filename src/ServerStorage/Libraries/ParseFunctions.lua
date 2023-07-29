@@ -13,7 +13,6 @@ Parameters:
     player: (Player) The player instance of the player executing the command. This is used for the "me" identifier.
 
 Possible Identifiers:
-
     "me": The player executing the command.
     "all": All players currently in the server.
     "others": All players currently in the server except the player executing the command.
@@ -54,20 +53,37 @@ function module.string(argumentGiven:string): classes.Result<{Player} | string>
 	return classes.newResult(true, argumentGiven)
 end
 
---[[
-These arguments types are not done yet! :(
-
 function module.number(argumentGiven:string): classes.Result<number | string>
-	return classes.Result.new(true, argumentGiven)
+	local parsedNumber = tonumber(argumentGiven)
+	if not parsedNumber then
+		return classes.newResult(false, `Expected a number, got '{argumentGiven}'`)
+	end
+	return classes.newResult(true, argumentGiven)
 end
 
 function module.integer(argumentGiven:string): classes.Result<number | string>
-	return classes.Result.new(true, argumentGiven)
+	local parsedNumber = tonumber(argumentGiven)
+	if not parsedNumber then
+		return classes.newResult(false, `Expected an integer, got '{argumentGiven}'`)
+	end
+	return classes.newResult(true, math.round(parsedNumber))
 end
 
-function module.boolean(): classes.Result<boolean | string>
-	return classes.Result.new(true, argumentGiven)
+function module.boolean(argumentGiven:string): classes.Result<boolean|string>
+	local conditionals = {
+	["true"] = true,
+	["yes"] = true,
+	["1"] = true,
+	["false"] = false,
+	["no"] = false,
+	["0"] = false,
+	}
+
+	local parsedBoolean = conditionals[argumentGiven.lower()]
+	if not parsedBoolean then
+		return classes.newResult(false, `Expected true or false value, got '{argumentGiven}'`)
+	end
+	return classes.newResult(true, parsedBoolean)
 end
-]]--
 
 return module
