@@ -16,11 +16,11 @@
    - number: A number with decimal points. (AKA a float)
    - boolean: A true or false value. "true", "yes", or "1" are valid true values and "false", "no", or "0" are valid false values.
 
-* Command emplate
+* Command template
 	command_name = {
 		aliases = {"command", "aliases"},
 		arguments = {
-			{name = "argumentName", type = "argumentType", optional = false, default = nil}
+			{name = "argumentName", type = "argumentType", optional = false, default = nil},
 			{...} }
 		info = "Description of the command.",
 		commandFunction = require("path.to.command_script"),
@@ -36,8 +36,8 @@ local module = {
 	gear = {
 		aliases = {"gear", "tool"},
 		arguments = {
-			{type = "manyPlayers", name = "Player/s"},
-			{type = "integer", name = "Tool ID"} },
+			{name = "Player/s", type = "manyPlayers"},
+			{ name = "Tool ID", type = "integer"} },
 		info = "Equips players with a gear or tool specified by an assetID.",
 		commandFunction = require(ServerCommands.gear),
 	},
@@ -45,8 +45,8 @@ local module = {
 	kick = {
 		aliases = {"kick"},
 		arguments = {
-			{type = "manyPlayers", name = "Player/s"},
-			{type = "string", name = "Message", optional = true} },
+			{name = "Player/s", type = "manyPlayers"},
+			{name = "Message", type = "string",  optional = true} },
 		info = "Removes players from the server with an optional message.",
 		commandFunction = require(ServerCommands.kick),
 	},
@@ -54,7 +54,7 @@ local module = {
 	kill = {
 		aliases = {"kill"},
 		arguments = { 
-			{type = "manyPlayers", name = "Player/s"} },
+			{name = "Player/s", type = "manyPlayers"} },
 		info = "Kills players' characters.",
 		commandFunction = require(ServerCommands.kill),
 	},
