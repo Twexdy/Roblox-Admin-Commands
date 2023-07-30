@@ -66,7 +66,7 @@ function module.integer(argumentGiven:string): classes.Result<number | string>
 	if not parsedNumber then
 		return classes.newResult(false, `Expected an integer, got '{argumentGiven}'`)
 	end
-	return classes.newResult(true, math.round(parsedNumber))
+	return classes.newResult(true, math.floor(parsedNumber))
 end
 
 function module.boolean(argumentGiven:string): classes.Result<boolean|string>
@@ -74,13 +74,14 @@ function module.boolean(argumentGiven:string): classes.Result<boolean|string>
 	["true"] = true,
 	["yes"] = true,
 	["1"] = true,
+	
 	["false"] = false,
 	["no"] = false,
 	["0"] = false,
 	}
 
-	local parsedBoolean = conditionals[argumentGiven.lower()]
-	if not parsedBoolean then
+	local parsedBoolean = conditionals[string.lower(argumentGiven)]
+	if parsedBoolean == nil then
 		return classes.newResult(false, `Expected true or false value, got '{argumentGiven}'`)
 	end
 	return classes.newResult(true, parsedBoolean)
